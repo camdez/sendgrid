@@ -1,5 +1,6 @@
 (ns sendgrid.core-test
-  (:require [clojure.test :refer :all]
+  (:require [clojure.java.io :as io]
+            [clojure.test :refer :all]
             [environ.core :as environ]
             [sendgrid.core :refer :all]))
 
@@ -26,10 +27,18 @@
     (is (= (-> (profile config) :username)
            (:api-user config)))))
 
-(deftest test-send
+(deftest test-send-email
   (testing "Sending a text-only email"
     (is (= (-> (send-email config text-params) :message)
            "success")))
   (testing "Sending an html-only email"
     (is (= (-> (send-email config html-params) :message)
+           "success")))
+  (testing "Sending an email with an attachment"
+    (is (= (->> (assoc text-params
+                       :attachments
+                       [{:name "plain.txt", :content "Simple."}
+                        {:name "yay.jpg",   :content (-> "yay.jpg" io/resource io/file)}])
+                (send-email config)
+                :message)
            "success"))))

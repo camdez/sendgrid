@@ -6,4 +6,6 @@
       first))
 
 (defn send-email [config params]
-  (request/request config :post "mail.send" params))
+  (let [attachments (:attachments params)
+        params      (dissoc params :attachments)]
+    (request/request config :post "mail.send" params attachments)))
