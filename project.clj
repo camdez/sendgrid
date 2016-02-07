@@ -1,4 +1,4 @@
-(defproject camdez/sendgrid "0.1.0"
+(defproject camdez/sendgrid "0.1.1-SNAPSHOT"
   :description "Clojure library for sending emails with SendGrid"
   :url "https://github.com/camdez/sendgrid"
   :license {:name "MIT License"
