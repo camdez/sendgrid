@@ -6,4 +6,4 @@
       first))
 
 (defn send-email [config params]
-  (request/request config :get "mail.send" params))
+  (request/request config :post "mail.send" params))

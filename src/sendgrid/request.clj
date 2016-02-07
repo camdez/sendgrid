@@ -19,9 +19,11 @@
     resp))
 
 (defn request [config method endpoint params]
-  (when (= method :get)
-    (-> (http/get (build-url endpoint)
-                  {:query-params (merged-params config params)})
-        (update :body #(json/parse-string % utils/dasherize-kw))
-        (handle-api-errors)
-        :body)))
+  (-> (http/request {:method method
+                     :url (build-url endpoint)
+                     (if (= method :post)
+                       :form-params
+                       :query-params) (merged-params config params)})
+      (update :body #(json/parse-string % utils/dasherize-kw))
+      (handle-api-errors)
+      :body))
