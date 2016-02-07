@@ -4,7 +4,64 @@ A Clojure library for sending emails with [SendGrid][].
 
 ## Usage
 
-FIXME
+```clj
+(require '[sendgrid.core :as sendgrid])
+
+(def sg-config
+  {:api-user "camdez"
+   :api-key  "d34db33f"})
+
+;; Fetch your profile
+(sendgrid/profile sg-config)
+;; => {:username       "camdez"
+;;     :first-name     "Cameron"
+;;     :last-name      "Desautels"
+;;     :website        "https://camdez.com"
+;;     :email          "[REDACTED]"
+;;     :address        "[REDACTED]"
+;;     :address2       "[REDACTED]"
+;;     :city           "[REDACTED]"
+;;     :state          "[REDACTED]"
+;;     :zip            "[REDACTED]"
+;;     :country        "[REDACTED]"
+;;     :website-access "[REDACTED]"
+;;     :active         "[REDACTED]"
+;;     :phone          "[REDACTED]"}
+
+;; Send a plain-text email
+(sendgrid/send-email sg-config
+                     {:to      "email@example.com"
+                      :from    "email2@example.com"
+                      :subject "SendGrid Test"
+                      :text    "Email body here."})
+;; => {:message "success"}
+
+;; Send an HTML email
+(sendgrid/send-email sg-config
+                     {:to      "email@example.com"
+                      :from    "email2@example.com"
+                      :subject "SendGrid Test"
+                      :html    "<h1>Email body here.</h1>"})
+;; => {:message "success"}
+```
+
+For more details, please see the
+[SendGrid API documentation][sendgrid-api-docs].
+
+## Testing
+
+To run the tests you'll need the following environment variables set:
+
+- `SENDGRID_API_USER`
+- `SENDGRID_API_KEY`
+- `FROM_EMAIL`
+- `TO_EMAIL`
+
+Alternately you can set these values in a `profiles.clj` file (see
+[Environ][] for more information).
+
+Please note that the tests will send real emails to the `TO_EMAIL`
+you've set, and will count against your SendGrid email quota.
 
 ## Motivation
 
@@ -25,3 +82,5 @@ Copyright © 2016 Cameron Desautels
 Distributed under the MIT License.
 
 [sendgrid]: https://sendgrid.com
+[environ]: https://github.com/weavejester/environ
+[sendgrid-api-docs]: https://sendgrid.com/docs/API_Reference/Web_API/index.html

@@ -1,6 +1,9 @@
-(ns sendgrid.core)
+(ns sendgrid.core
+  (:require [sendgrid.request :as request]))
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(defn profile [config]
+  (-> (request/request config :get "profile.get" {})
+      first))
+
+(defn send-email [config params]
+  (request/request config :get "mail.send" params))
