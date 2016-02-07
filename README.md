@@ -1,5 +1,7 @@
 # sendgrid
 
+[![Clojars Project][clojars-badge]][clojars-sendgrid]
+
 A Clojure library for sending emails with [SendGrid][].
 
 ## Usage
@@ -99,6 +101,8 @@ Copyright © 2016 Cameron Desautels
 
 Distributed under the MIT License.
 
+[clojars-badge]: http://clojars.org/camdez/sendgrid/latest-version.svg
+[clojars-sendgrid]: http://clojars.org/camdez/sendgrid
 [sendgrid]: https://sendgrid.com
 [environ]: https://github.com/weavejester/environ
 [sendgrid-api-docs]: https://sendgrid.com/docs/API_Reference/Web_API/index.html
