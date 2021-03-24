@@ -9,5 +9,5 @@
 
 (deftest test-merged-params
   (testing "Merging of config and request params"
-    (is (= (merged-params {:api-user "foo", :api-key "bar"} {:speed "fast"})
-           {:api_user "foo", :api_key "bar", :speed "fast"}))))
+    (is (= (merged-params {:api-key "bar"} {:speed "fast"})
+           {:api_key "bar", :speed "fast"}))))

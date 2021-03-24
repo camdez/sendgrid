@@ -10,25 +10,7 @@ A Clojure library for sending emails with [SendGrid][].
 (require '[sendgrid.core :as sendgrid])
 
 (def sg-config
-  {:api-user "camdez"
-   :api-key  "d34db33f"})
-
-;; Fetch your profile
-(sendgrid/profile sg-config)
-;; => {:username       "camdez"
-;;     :first-name     "Cameron"
-;;     :last-name      "Desautels"
-;;     :website        "https://camdez.com"
-;;     :email          "[REDACTED]"
-;;     :address        "[REDACTED]"
-;;     :address2       "[REDACTED]"
-;;     :city           "[REDACTED]"
-;;     :state          "[REDACTED]"
-;;     :zip            "[REDACTED]"
-;;     :country        "[REDACTED]"
-;;     :website-access "[REDACTED]"
-;;     :active         "[REDACTED]"
-;;     :phone          "[REDACTED]"}
+  {:api-key "d34db33f"})
 
 ;; Send a plain-text email
 (sendgrid/send-email sg-config
@@ -72,7 +54,6 @@ Attachments must be a sequence of maps where each map contains a
 
 To run the tests you'll need the following environment variables set:
 
-- `SENDGRID_API_USER`
 - `SENDGRID_API_KEY`
 - `FROM_EMAIL`
 - `TO_EMAIL`

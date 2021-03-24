@@ -17,14 +17,17 @@
   (concat (map (fn [[k v]] {:name (name k), :content v}) params)
           (map (fn [a] (update a :name #(format "files[%s]" %))) attachments)))
 
-(defn build-request [method endpoint params attachments]
-  (merge
-   {:method method
-    :url    (build-url endpoint)}
-   (cond
-     (= method :get)      {:query-params params}
-     (empty? attachments) {:form-params  params}
-     :else                {:multipart    (multipart-params params attachments)})))
+(defn build-request [method endpoint config params attachments]
+  (let [mp (-> (merged-params config params)
+               (dissoc :api_user :api_key))]
+    (merge
+     {:method method
+      :url    (build-url endpoint)
+      :oauth-token (:api-key config)}
+     (cond
+       (= method :get)      {:query-params mp}
+       (empty? attachments) {:form-params  mp}
+       :else                {:multipart    (multipart-params mp attachments)}))))
 
 (defn handle-api-errors [resp]
   (if-let [error (get-in resp [:body :error])]
@@ -38,7 +41,7 @@
   ([config method endpoint params]
    (request config method endpoint params nil))
   ([config method endpoint params attachments]
-   (-> (build-request method endpoint (merged-params config params) attachments)
+   (-> (build-request method endpoint config params attachments)
        (http/request)
        (update :body #(json/parse-string % utils/dasherize-kw))
        (handle-api-errors)

@@ -5,8 +5,7 @@
             [sendgrid.core :refer :all]))
 
 (def config
-  {:api-user (environ/env :sendgrid-api-user)
-   :api-key  (environ/env :sendgrid-api-key)})
+  {:api-key (environ/env :sendgrid-api-key)})
 
 (def from (environ/env :from-email))
 (def to   (environ/env :to-email))
@@ -21,11 +20,6 @@
   (assoc basic-params :html "<h1>Hello World</h1>"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(deftest test-profile
-  (testing "Fetching user profile"
-    (is (= (-> (profile config) :username)
-           (:api-user config)))))
 
 (deftest test-send-email
   (testing "Sending a text-only email"
