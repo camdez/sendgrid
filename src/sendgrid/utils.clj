@@ -1,12 +1,8 @@
-(ns sendgrid.utils)
+(ns sendgrid.utils
+  (:require [clojure.string :as str]))
 
 (def dasherize-kw
-  (comp keyword #(clojure.string/replace % "_" "-") name))
+  (comp keyword #(str/replace % "_" "-") name))
 
 (def underscore-kw
-  (comp keyword #(clojure.string/replace % "-" "_") name))
-
-(defn map-keys
-  "Apply function F to the keys of map M, returning a new map."
-  [f m]
-  (reduce-kv #(assoc %1 (f %2) %3) {} m))
+  (comp keyword #(str/replace % "-" "_") name))

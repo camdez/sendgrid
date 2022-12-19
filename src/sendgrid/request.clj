@@ -6,19 +6,23 @@
 (def base-url
   "https://api.sendgrid.com/api/")
 
-(defn build-url [endpoint]
-  (format "%s%s.json" base-url endpoint))
+(defn- build-url [endpoint]
+  (str base-url endpoint ".json"))
 
-(defn merged-params [config params]
-  (->> (merge config params)
-       (utils/map-keys utils/underscore-kw)))
+(defn- multipart-params [params]
+  (mapcat (fn [[k vs]]
+            (let [vs    (cond-> vs (not (coll? vs)) vector)
+                  mult? (some? (second vs))]
+              (for [v vs]
+                (if (map? v)
+                  (update v :name #(str (name k) "[" % "]"))
+                  {:name    (str (name k) (when mult? "[]"))
+                   :content v}))))
+          params))
 
-(defn multipart-params [params attachments]
-  (concat (map (fn [[k v]] {:name (name k), :content v}) params)
-          (map (fn [a] (update a :name #(format "files[%s]" %))) attachments)))
-
-(defn build-request [method endpoint config params attachments]
-  (let [mp (-> (merged-params config params)
+(defn- build-request [method endpoint config params attachments]
+  (let [mp (-> (merge config params)
+               (update-keys utils/underscore-kw)
                (dissoc :api_user :api_key))]
     (merge
      {:method method
@@ -27,9 +31,11 @@
      (cond
        (= method :get)      {:query-params mp}
        (empty? attachments) {:form-params  mp}
-       :else                {:multipart    (multipart-params mp attachments)}))))
+       :else                {:multipart    (-> mp
+                                               (assoc :files attachments)
+                                               multipart-params)}))))
 
-(defn handle-api-errors [resp]
+(defn- handle-api-errors [resp]
   (if-let [error (get-in resp [:body :error])]
     (throw (ex-info (:message error) (dissoc error :message)))
     resp))
