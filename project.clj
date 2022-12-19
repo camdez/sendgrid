@@ -5,6 +5,6 @@
             :url "http://www.opensource.org/licenses/mit-license.php"}
   :dependencies [[cheshire "5.11.0"]
                  [clj-http "3.12.3"]
-                 [environ "1.2.0"]
                  [org.clojure/clojure "1.11.1"]]
+  :profiles {:dev {:dependencies [[environ "1.2.0"]]}}
   :plugins [[lein-environ "1.0.2"]])
